@@ -20,12 +20,12 @@ export class AuthService {
   /**
    * @description 구글 로그인 URL을 가져옵니다.
    * */
-  async getGoogleAuthUrl() {
-    this.logger.info('!!!!!!!!!!!!!! getGoogleAuthUrl !!!!!!!!!!!!!!');
+  async getSnsAuthUrl(type: string) {
+    this.logger.info('!!!!!!!!!!!!!! getSnsAuthUrl !!!!!!!!!!!!!!');
     const { data, error } = await this.supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider: type,
       options: {
-        redirectTo: 'http://localhost:3000/auth/callback', // React 앱의 콜백 URL
+        redirectTo: 'http://localhost:3000/auth/callback',
       },
     });
 

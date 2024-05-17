@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
@@ -20,11 +20,11 @@ export class AuthController {
   }
 
   /**
-   * @description google 로그인을 위한 Redirect URL 반환
+   * @description SNS 로그인을 위한 Redirect URL 반환
    */
-  @Get('/google')
-  async login() {
-    return await this.authService.getGoogleAuthUrl();
+  @Get('/sns')
+  async login(@Query('type') type) {
+    return await this.authService.getSnsAuthUrl(type);
   }
 
   /**
@@ -32,11 +32,11 @@ export class AuthController {
    */
   @Post('/callback')
   async authCallback(
-    @Body() body: { access_token: string; refresh_token: string },
+    @Body() body: { accessToken: string; refreshToken: string },
   ) {
     return await this.authService.handleAuthCallback(
-      body.access_token,
-      body.refresh_token,
+      body.accessToken,
+      body.refreshToken,
     );
   }
 
