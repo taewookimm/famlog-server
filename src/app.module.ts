@@ -12,6 +12,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthMiddleware } from './core/auth/auth.middelware';
 import { WinstonModule } from 'nest-winston';
 import options from './util/logger/winston';
+import { APP_FILTER } from '@nestjs/core';
+import { ResultExceptionFilter } from './core/responseForm/filters/response-exception.filters';
 
 @Module({
   imports: [
@@ -24,7 +26,13 @@ import options from './util/logger/winston';
     WinstonModule.forRoot(options),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: ResultExceptionFilter,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

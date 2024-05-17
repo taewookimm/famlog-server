@@ -2,6 +2,7 @@ import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import { ResultResponse } from '../../core/responseForm/response';
 
 @Controller('auth')
 export class AuthController {
@@ -14,17 +15,20 @@ export class AuthController {
    * @description ping 테스트
    */
   @Get('/')
-  async ping() {
+  async ping(): Promise<ResultResponse<any>> {
     this.logger.info('!!!!!!!!!!!!!!!!! ping !!!!!!!!!!!!!!!!!');
-    return 'ping';
+    return new ResultResponse<any>('ping', ['Ping']);
   }
 
   /**
    * @description SNS 로그인을 위한 Redirect URL 반환
    */
   @Get('/sns')
-  async login(@Query('type') type) {
-    return await this.authService.getSnsAuthUrl(type);
+  async login(@Query('type') type): Promise<ResultResponse<any>> {
+    return new ResultResponse<any>(
+      await this.authService.getSnsAuthUrl(type),
+      null,
+    );
   }
 
   /**
@@ -33,10 +37,13 @@ export class AuthController {
   @Post('/callback')
   async authCallback(
     @Body() body: { accessToken: string; refreshToken: string },
-  ) {
-    return await this.authService.handleAuthCallback(
-      body.accessToken,
-      body.refreshToken,
+  ): Promise<ResultResponse<any>> {
+    return new ResultResponse<any>(
+      await this.authService.handleAuthCallback(
+        body.accessToken,
+        body.refreshToken,
+      ),
+      null,
     );
   }
 
@@ -44,7 +51,12 @@ export class AuthController {
    * @description 토큰 리프레시 API
    */
   @Post('/refresh')
-  async refreshToken(@Body() body: { refreshToken: string }) {
-    return await this.authService.refreshAccessToken(body.refreshToken);
+  async refreshToken(
+    @Body() body: { refreshToken: string },
+  ): Promise<ResultResponse<any>> {
+    return new ResultResponse<any>(
+      await this.authService.refreshAccessToken(body.refreshToken),
+      null,
+    );
   }
 }

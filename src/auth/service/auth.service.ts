@@ -50,7 +50,7 @@ export class AuthService {
   }
 
   /**
-   * @description 토큰 리프리세
+   * @description 토큰 리프리시
    * TODO: data 에 유저 정보들이 다 담겨서 들어오는데 필터링 해서 보내줘야함
    * TODO: session 안에 access_token, refresh_token 정보가 다 들어있음
    * @param refreshToken
