@@ -44,7 +44,7 @@ export class AuthController {
    * @description 토큰 리프레시 API
    */
   @Post('/refresh')
-  async refreshToken(@Body() body: { refresh_token: string }) {
-    return await this.authService.refreshAccessToken(body.refresh_token);
+  async refreshToken(@Body() body: { refreshToken: string }) {
+    return await this.authService.refreshAccessToken(body.refreshToken);
   }
 }

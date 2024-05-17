@@ -67,8 +67,10 @@ export class AuthService {
       }
 
       return {
-        accessToken: data.user.session.access_token,
-        refreshToken: data.user.session.refresh_token,
+        accessToken:
+          data?.user?.session?.access_token ?? data.session.access_token,
+        refreshToken:
+          data?.user?.session?.refresh_token ?? data.session.refresh_token,
       };
     } catch (error) {
       this.logger.error('Error refreshing access token:', error);
